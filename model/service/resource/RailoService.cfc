@@ -8,16 +8,32 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
     }
 
     /**
-     * Updates content for Adobe ColdFusion resources
+     * Updates content for Railo resources
      * @targets {String} The targets for the update (Defaults to all)
      */
-    public Void function updateContent( required String targets="*" ) {
-        var q = new query();
-            q.setDataSource( 'gloss' );
-            q.setSql( "SELECT * FROM TempMenu" );
-        var result = q.execute().getResult();
-        var menu = deserializeJSON( result.menu );
-        composeMenu( menu=menu );
+    public Void function updateContent( required String targets="tag,function,object" ) {
+        // loop over targets
+        deleteAll();
+        for( var target in targets ) {
+            // each menu is a collection of data ready to be inserted
+            var menu = scrapeMenu( target );
+            // loop over menu items
+            for( var item in menu ) {
+                var criteria = {
+                    "Slug" = item.slug,
+                    "Title" = item.title
+                };
+                // see if this already exists
+                var resource = findWhere( criteria=criteria );
+                if( isNull( resource ) ) {
+                    var resource = new();
+                }
+                // popluate with some data
+                populate( target=resource, memento=item );
+                // save resource
+                save( resource );
+            }
+        }
     }
 
     /**
@@ -61,38 +77,38 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
         return menu;
     }
     /**
-     * Scrapes Adobe CF documentation menu from remote source
-     * @tree {Array} Array of menu items
-     * @pageId {String} ID of the currently evaluated page
+     * Scrapes Railo documentation menu from remote source
+     * @resource {String} Name of the resource to scrape
      * return Array
      */
-    public Array function scrapeMenu( required Any tree=[] ) {
-        //<a [^>]*\bhref\s*=\s*"[^"]*(/index\.cfm/tag/[^"]*)
+    public Array function scrapeMenu( required String resource ) {
         var httpService = new http();
-            httpService.setURL( "http://railodocs.org/index.cfm/tags/" );
+            httpService.setURL( "http://railodocs.org/index.cfm/#arguments.resource#s/" );
         var result = httpService.send().getPrefix().fileContent;
-        var menu = result;
-        writedump( menu );
-        abort;
-        for( var item in menu ) {
+        // item tracker
+        var items = [];
+        // get matches
+        var matches = reMatch( '<a [^>]*\bhref\s*=\s*"[^"]*(/index\.cfm/#arguments.resource#/[^"]*).*?>.*?</a>', result );
+        // loop over matches to create resource array
+        for( var match in matches ) {
+            var link = reReplaceNoCase( match, '<a [^>]*\bhref\s*=\s*"[^"]*(/index\.cfm/#arguments.resource#/[^"]*).*?>(.*?)</a>', '\1', 'one' );
+            var title = reReplaceNoCase( match, '<a [^>]*\bhref\s*=\s*"[^"]*(/index\.cfm/#arguments.resource#/[^"]*).*?>(.*?)</a>', '\2', 'one' );
+            var slug = reReplaceNoCase( link, "/index\.cfm/#arguments.resource#/(.*?)/.*$", "\1", "one" );
             // create node
-            var node = {
-                "href" = item.href,
-                "id" = item.pageId,
-                "text" = item.text,
-                "children" = []
+            var item = {
+                "link" = link,
+                "slug" = slug,
+                "title" = reReplaceNoCase( title, "<[^<]+?>", "", "all" ),
+                "category" = arguments.resource
             };
-            if( structKeyExists( item, "position" ) && item.position != "undefined" ) {
-                try {
-                    node.children = buildTree( pageId=item.pageId ); 
-                }
-                catch( any e ) {
-                    writedump( e );
-                    abort;
-                }
-            }            
-            arrayAppend( arguments.tree, node );
+            if( arguments.resource=="object" ) {
+                var parsed = reMatch( "(.*)\.(.*)", title );
+                item[ "class" ] = reReplaceNoCase( title, "(.*)\.(.*)", "\1", "one" );
+                item[ "title" ] = reReplaceNoCase( title, "(.*)\.(.*)", "\2", "one" );
+                item[ "slug" ] = reReplaceNoCase( link, "/index\.cfm/#arguments.resource#/#item[ 'class' ]#/(.*?)", "\1", "one" );
+            }    
+            arrayAppend( items, item );
         }
-        return arguments.tree;
+        return items;
     }
 }
