@@ -12,7 +12,6 @@ component displayname="RailoBugService" extends="coldbox.system.orm.hibernate.Vi
      * @targets {String} The targets for the update (Defaults to all)
      */
     public Void function updateContent( required String targets="*" ) {
-        deleteAll();
         // each menu is a collection of data ready to be inserted
         var items = scrapeBugs();
         // loop over menu items

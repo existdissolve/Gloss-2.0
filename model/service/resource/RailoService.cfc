@@ -80,7 +80,7 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
             var slug = reReplaceNoCase( link, "/index\.cfm/#arguments.resource#/(.*?)/.*$", "\1", "one" );
             // create node
             var item = {
-                "link" = link,
+                "link" = "http://railodocs.org" & link,
                 "slug" = slug,
                 "title" = reReplaceNoCase( title, "<[^<]+?>", "", "all" ),
                 "category" = arguments.resource

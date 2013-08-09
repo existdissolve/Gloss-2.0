@@ -71,7 +71,7 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
         for( var item in menu ) {
             var slug = listLast( item.href, "/" );
             var node = {
-                "Link" = item.href,
+                "Link" = "https://learn.adobe.com" & item.href,
                 "Slug" = slug,
                 "Title" = item.text,
                 "PageID" = item.id

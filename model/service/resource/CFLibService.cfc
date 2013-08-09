@@ -59,7 +59,7 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
             var udfs = getUDFs( library[ 1 ] );
             for( var udf in udfs ) {
                 var node = {
-                    "Link" = "/udf/#udf[ 2 ]#",
+                    "Link" = "http://www.cflib.org/udf/#udf[ 2 ]#",
                     "Slug" = udf[ 2 ],
                     "Title" = udf[ 2 ],
                     "Library" = lib,
