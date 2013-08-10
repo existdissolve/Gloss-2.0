@@ -17,4 +17,8 @@ component entityName="CFLib" table="CFLib" extends="Resource" persistent="true" 
     public CFLib function init() {
         return this;
     }
+
+    public String function buildContentCacheKey() {
+        return "cflib-" & this.getSlug();
+    }
 }

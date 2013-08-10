@@ -1,5 +1,6 @@
 component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
     property name="jSoup" inject="javaLoader:org.jsoup.Jsoup";
+    property name="cachebox" inject="cachebox";
     /**
      * Constructor
      */
@@ -14,8 +15,22 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
      * return String
      */
     public String function getContent( required model.orm.resource.Adobe resource ) {
-        // parse html and return it
-        return scrapeContent( resource.getLink() );
+        var key = arguments.resource.buildContentCacheKey();
+        var content = "";
+        // get default cache
+        var cache = cachebox.getDefaultCache();
+        // if item exists in cache...
+        if( cache.lookup( key ) ) {
+            content = cache.get( key );
+        }
+        // not in cache; retrieve it remotely
+        else {
+            // parse html
+            content = scrapeContent( resource.getLink() );
+            // add to cache
+            cache.set( key, content, 0 );
+        }         
+        return content;
     }
 
     /**

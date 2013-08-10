@@ -17,4 +17,8 @@ component entityName="RailoBug" table="RailoBug" extends="Resource" persistent="
     public RailoBug function init() {
         return this;
     }
+
+    public String function buildContentCacheKey() {
+        return "railobug-" & this.getSlug();
+    }
 }

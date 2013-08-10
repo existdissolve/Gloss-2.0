@@ -50,19 +50,19 @@ component{
             case "Adobe":
                 var resource = AdobeService.get( rc.ResourceID );
                 if( !isNull( resource ) ) {
-                    content = AdobeService.getContent( resource );
+                    content = AdobeService.getContent( resource );                  
                 }
                 break;
             case "Railo":
                 var resource = RailoService.get( rc.ResourceID );
                 if( !isNull( resource ) ) {
-                    content = RailoService.getContent( resource );
+                    content = RailoService.getContent( resource );                    
                 }
                 break;
             case "CFLib":
                 var resource = CFLibService.get( rc.ResourceID );
                 if( !isNull( resource ) ) {
-                    content = CFLibService.getContent( resource );
+                    content = CFLibService.getContent( resource );                    
                 }
                 break;
         }

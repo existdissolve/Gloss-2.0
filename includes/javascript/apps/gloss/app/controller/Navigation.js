@@ -5,12 +5,8 @@ Ext.define('Gloss.controller.Navigation', {
     extend: 'Gloss.controller.Base',
     views: [
         'menu.Tree',
+        'Navigation',
         'Content'
-    ],
-    stores: [
-        'resource.Railo',
-        'resource.Adobe',
-        'resource.CFLib'
     ],
     refs: [
         { ref:'Content', selector:'[xtype=content]' }

@@ -19,4 +19,8 @@ component entityName="AdobeBug" table="AdobeBug" extends="Resource" persistent="
     public AdobeBug function init() {
         return this;
     }
+
+    public String function buildContentCacheKey() {
+        return "adobebug-" & this.getSlug();
+    }
 }

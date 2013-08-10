@@ -15,4 +15,8 @@ component entityName="Adobe" table="Adobe" extends="Resource" persistent="true" 
     public Adobe function init() {
         return this;
     }
+
+    public String function buildContentCacheKey() {
+        return "adobe-" & this.getSlug();
+    }
 }
