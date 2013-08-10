@@ -8,7 +8,7 @@ Ext.define('Gloss.Application', {
     ],
 
     controllers: [
-        'Main'
+        'Navigation'
     ],
 
     stores: [

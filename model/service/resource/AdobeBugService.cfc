@@ -34,6 +34,10 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
         }
     }
 
+    /**
+     * Scrapes Adobe Bug tracker remote source
+     * return Array
+     */
     public Array function scrapeBugs( required String resource=7770 ) {
         // version hash
         var versions = {

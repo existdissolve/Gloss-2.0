@@ -34,72 +34,75 @@ Optional Methods
 - {environment}() : The name of the environment found and called by the framework.
 
 */
-	
+    
 // Configure ColdBox Application
 function configure(){
 
-	// coldbox directives
-	coldbox = {
-		//Application Setup
-		appName 				= "CFGloss 2.0",
-		
-		//Development Settings
-		debugMode				= false,
-		debugPassword			= "",
-		reinitPassword			= "",
-		handlersIndexAutoReload = true,
-		configAutoReload		= false,
-		
-		//Implicit Events
-		defaultEvent			= "general.index",
-		requestStartHandler		= "",
-		requestEndHandler		= "",
-		applicationStartHandler = "",
-		applicationEndHandler	= "",
-		sessionStartHandler 	= "",
-		sessionEndHandler		= "",
-		missingTemplateHandler	= "",
-		
-		//Error/Exception Handling
-		exceptionHandler		= "",
-		onInvalidEvent			= "",
-		customErrorTemplate		= "",
-			
-		//Application Aspects
-		handlerCaching 			= false,
-		eventCaching			= false
-	};
-	
-	// environment settings, create a detectEnvironment() method to detect it yourself.
-	// create a function with the name of the environment so it can be executed if that environment is detected
-	// the value of the environment is a list of regex patterns to match the cgi.http_host.
-	environments = {
-		development = "^cfgloss.dev",
-		production = "^cfgloss.com"
-	};
-	
-	// Module Directives
-	modules = {
-		//Turn to false in production
-		autoReload = true,
-		// An array of modules names to load, empty means all of them
-		include = [],
-		// An array of modules names to NOT load, empty means none
-		exclude = [] 
-	};
+    // coldbox directives
+    coldbox = {
+        //Application Setup
+        appName                 = "CFGloss 2.0",
+        
+        //Development Settings
+        debugMode               = false,
+        debugPassword           = "",
+        reinitPassword          = "",
+        handlersIndexAutoReload = true,
+        configAutoReload        = false,
+        
+        //Implicit Events
+        defaultEvent            = "general.index",
+        requestStartHandler     = "",
+        requestEndHandler       = "",
+        applicationStartHandler = "",
+        applicationEndHandler   = "",
+        sessionStartHandler     = "",
+        sessionEndHandler       = "",
+        missingTemplateHandler  = "",
+        
+        //Error/Exception Handling
+        exceptionHandler        = "",
+        onInvalidEvent          = "",
+        customErrorTemplate     = "",
+            
+        //Application Aspects
+        handlerCaching          = false,
+        eventCaching            = false
+    };
+    // environment settings, create a detectEnvironment() method to detect it yourself.
+    // create a function with the name of the environment so it can be executed if that environment is detected
+    // the value of the environment is a list of regex patterns to match the cgi.http_host.
+    environments = {
+        development = "^cfgloss.dev",
+        production = "^cfgloss.com"
+    };
+    
+    settings = {
+        javaloader_libpath = "#expandPath( '.' )#/includes/java/"
+    };
 
-	//Layout Settings
-	layoutSettings = {
-		defaultLayout = "Layout.Main.cfm"
-	};
-	
-	//Register interceptors as an array, we need order
-	interceptors = [
-		 //Autowire
-		 {class="coldbox.system.interceptors.Autowire"},
-		 //SES
-		 {class="coldbox.system.interceptors.SES"}
-	];	
-}	
+    // Module Directives
+    modules = {
+        //Turn to false in production
+        autoReload = true,
+        // An array of modules names to load, empty means all of them
+        include = [],
+        // An array of modules names to NOT load, empty means none
+        exclude = [] 
+    };
+
+    //Layout Settings
+    layoutSettings = {
+        defaultLayout = "Layout.Main.cfm"
+    };
+    
+    //Register interceptors as an array, we need order
+    interceptors = [
+         //Autowire
+         {class="coldbox.system.interceptors.Autowire"},
+         //SES
+         {class="coldbox.system.interceptors.SES"}
+    ];  
+}   
 </cfscript>
 </cfcomponent>

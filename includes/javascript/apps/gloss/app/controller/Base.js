@@ -1,13 +1,10 @@
-Ext.define('Gloss.controller.Main', {
+/**
+ * Base controller for all controllers in the Gloss application
+ */
+Ext.define('Gloss.controller.Base', {
     extend: 'Ext.app.Controller',
-    views: [
-        'menu.Tree'
-    ],
-    stores: [
-        'resource.Railo',
-        'resource.Adobe',
-        'resource.CFLib'
-    ],
+    views: [],
+    stores: [],
     init: function() {
         this.listen({
             controller: {},

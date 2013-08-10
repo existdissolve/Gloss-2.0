@@ -1,10 +1,22 @@
 component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
+    property name="jSoup" inject="javaLoader:org.jsoup.Jsoup";
+
     /**
      * Constructor
      */
     public RailoService function init() {
         super.init( entityName="Railo" );        
         return this;
+    }
+
+    /**
+     * Retrieves content from cache or remote source
+     * @resource {model.orm.resource.Railo} The resource for which to retrieve content
+     * return String
+     */
+    public String function getContent( required model.orm.resource.Railo resource ) {
+        // parse html and return it
+        return scrapeContent( resource.getLink() );
     }
 
     /**
@@ -226,5 +238,43 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
             });
         }
         return objMenu;
+    }
+
+    /**
+     * Scrapes content from remote page and processes with jsoup library
+     * @html The html content to parse
+     * return String
+     */
+    private String function scrapeContent( required String url ) {
+        var returnHTML = "";
+        // retrieve content 
+        var httpService = new http();
+            httpService.setURL( arguments.url );
+        var html = httpService.send().getPrefix().fileContent;
+        // parse the results
+        var jsoupDocument = jSoup.parse( html );
+        // get by selector
+        var matchedHTML = jsoupDocument.select( "section##function_description" );
+        // if we have a match...
+        if( isArray( matchedHTML ) && arrayLen( matchedHTML ) ) {
+            // define "remove" selectors
+            var removeList = [ "script", "button", "##addItem", "h4:contains(Categories)", "ul##categories", "form" ];
+            // loop over remove selectors
+            for( var item in removeList ) {
+                var removeMatches = matchedHTML.select( item );
+                // loop over matches
+                for( var match in removeMatches ) {
+                    // remove the match
+                    match.remove();
+                }
+            }
+            // fix pre elements
+            var pres = matchedHTML.select( 'pre' );
+            for( var pre in pres ) {
+                pre.attr( "class", "gloss_code" );
+            }
+            returnHTML = matchedHTML.html();
+        }
+        return returnHTML;
     }
 }
