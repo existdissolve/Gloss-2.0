@@ -17,8 +17,8 @@ Ext.define('Gloss.controller.Navigation', {
     ],
     refs: [
         { ref:'CenterRegion', selector:'[xtype=layout.center]' },
-        { ref:'AdobeBugGrid', selector:'[xtype=grid.adobebug' },
-        { ref:'RailoBugGrid', selector:'[xtype=grid.railobug' }        
+        { ref:'AdobeBugGrid', selector:'[xtype=grid.adobebug]' },
+        { ref:'RailoBugGrid', selector:'[xtype=grid.railobug]' }        
     ],
     init: function() {
         this.listen({
@@ -38,6 +38,9 @@ Ext.define('Gloss.controller.Navigation', {
                 },
                 '[xtype=layout.center] grid[xtype*=bug]': {
                     beforerender: this.onBugGridLoad
+                },
+                '[xtype=layout.center] grid[xtype*=bug] toolbar[dock=top] field': {
+                    change: this.onBugGridSearch
                 }
             },
             global: {},
@@ -92,6 +95,31 @@ Ext.define('Gloss.controller.Navigation', {
         });
         // add grid to center region
         me.updateCenterContent( grid, type );
+    },
+    /**
+     * Applies filters to bug grid
+     * @param {String} type
+     * @param {Array} filters
+     */
+    searchBugGrid: function( type, filters ) {
+        var me = this,
+            grid = type=='AdobeBug' ? me.getAdobeBugGrid() : me.getRailoBugGrid(),
+            store = grid.getStore();
+        // silently clear filters
+        store.clearFilter( true );
+        // filter store
+        store.filter( filters );
+    },
+    /**
+     * Clears filters from bug grid
+     * @param {String} type
+     */
+    clearBugGridSearch: function( type ) {
+        var me = this,
+            grid = type=='AdobeBug' ? me.getAdobeBugGrid() : me.getRailoBugGrid(),
+            store = grid.getStore();
+        // loudly clear filters
+        store.clearFilter( false );
     },
     /**
      * Smartly updates main center region of application with passed content
@@ -206,5 +234,38 @@ Ext.define('Gloss.controller.Navigation', {
             store = grid.getStore();
         // load store
         store.load();
+    },
+    /**
+     * Handles grid search changes
+     * @private
+     * @param {Ext.form.Field} field
+     * @param {Object} newValue
+     * @param {Object} oldValue
+     * @param {Object} eOpts
+     */
+    onBugGridSearch: function( field, newValue, oldValue, eOpts ) {
+        var me = this,
+            grid = field.up( 'grid' ),
+            type = grid.xtype=='grid.adobebug' ? 'AdobeBug' : 'RailoBug',
+            fields = field.up( 'toolbar' ).query( 'field' ),
+            filters = [];
+        // loop over fields
+        for( var i=0; i<fields.length; i++ ) {
+            var field = fields[ i ];
+            // if a value exists, add as a filter
+            if( !Ext.isEmpty( field.getValue() ) ) {
+                filters.push({
+                    property: field.name,
+                    value: field.getValue()
+                });
+            }
+        }
+        // if there are filters...
+        if( filters.length ) {
+            me.searchBugGrid( type, filters );
+        }
+        else {
+            me.clearBugGridSearch( type );
+        }
     }
 });

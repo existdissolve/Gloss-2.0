@@ -30,6 +30,9 @@ component {
 			var sorter = deserializeJSON( arguments.rc.sortOrder );
 			rc.sortOrder = "#sorter[1].property# #sorter[1].direction#";
 		}
+		if( structKeyExists( arguments.rc, "filter" ) ) {
+			rc.filter = deserializeJSON( arguments.rc.filter );
+		}
 	}
 
 	function postHandler( required Any event, required Struct rc, required Struct prc ){

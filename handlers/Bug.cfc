@@ -50,10 +50,42 @@ component extends="Base" {
             case "AdobeBug":
                 // get criteria
                 var c = AdobeBugService.newCriteria();
+                // if there are filters
+                if( structKeyExists( rc, "filter" ) && isArray( rc.filter) ) {
+                    for( var crit in rc.filter ) {
+                        if( crit.property=="Query" ) {
+                            if( isNumeric( crit.value ) ) {
+                                c.isEq( "DefectID", c.convertValueToJavaType( propertyName="DefectID", value=crit.value ) );
+                            }
+                            else {
+                                c.or(
+                                    c.restrictions.like( "Title", "%#crit.value#%" ),
+                                    c.restrictions.like( "Status", "%#crit.value#%" ),
+                                    c.restrictions.like( "Reason", "%#crit.value#%" )
+                                );
+                            }
+                        }
+                        if( crit.property=="Version" ) {
+                            c.isEq( "Version", crit.value );
+                        }
+                    }
+                }
                 break;
             case "RailoBug":
                 // get criteria
                 var c = RailoBugService.newCriteria();
+                // if there are filters
+                if( structKeyExists( rc, "filter" ) && isArray( rc.filter) ) {
+                    for( var crit in rc.filter ) {
+                        if( crit.property=="Query" ) {
+                            c.or(
+                                c.restrictions.like( "Title", "%#crit.value#%" ),
+                                c.restrictions.like( "Summary", "%#crit.value#%" ),
+                                c.restrictions.like( "Description", "%#crit.value#%" )
+                            );
+                        }
+                    }
+                }
                 break;
         }
         var total= c.count();

@@ -65,7 +65,7 @@ Ext.define('Gloss.view.Navigation', {
                             width: 350,
                             height: 350,
                             border: true
-                        },
+                        }
                     ]
                 },
                 {

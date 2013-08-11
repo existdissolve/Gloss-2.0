@@ -1,7 +1,8 @@
 Ext.define('Gloss.Application', {
     name: 'Gloss',
     requires: [
-        'Ext.util.History'
+        'Ext.util.History',
+        'Gloss.ux.form.field.plugin.ClearTrigger'
     ],
     extend: 'Ext.app.Application',
     controllers: [

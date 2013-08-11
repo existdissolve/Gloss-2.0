@@ -17,10 +17,11 @@ Ext.ClassManager.addNameAlternateMappings({
   "ExtThemeNeptune.menu.Menu": [],
   "ExtThemeNeptune.container.ButtonGroup": [],
   "Ext.ux.grid.filter.Filter": [],
+  "Gloss.view.grid.RailoBug": [],
   "Ext.ux.GroupTabRenderer": [],
-  "Gloss.controller.Main": [],
   "Ext.ux.grid.TransformGrid": [],
   "Ext.ux.ajax.DataSimlet": [],
+  "Gloss.view.Content": [],
   "Ext.ux.FieldReplicator": [],
   "Gloss.view.menu.Tree": [],
   "Ext.ux.grid.filter.ListFilter": [],
@@ -35,25 +36,30 @@ Ext.ClassManager.addNameAlternateMappings({
   "ExtThemeNeptune.tab.Tab": [],
   "Ext.ux.grid.menu.ListMenu": [],
   "Ext.ux.GMapPanel": [],
+  "Gloss.view.grid.AdobeBug": [],
+  "Gloss.model.AdobeBug": [],
+  "Gloss.view.Navigation": [],
   "Ext.ux.form.MultiSelect": [
     "Ext.ux.Multiselect"
   ],
   "Ext.ux.DataView.LabelEditor": [],
   "Ext.ux.GroupTabPanel": [],
-  "Gloss.view.Main": [],
   "Ext.ux.grid.filter.StringFilter": [],
   "Ext.ux.statusbar.ValidationStatus": [],
   "ExtThemeNeptune.grid.column.RowNumberer": [],
   "Ext.ux.layout.Center": [],
   "Gloss.store.Resources": [],
   "Ext.ux.PreviewPlugin": [],
+  "Gloss.controller.Base": [],
   "Ext.ux.DataView.Animated": [],
   "ExtThemeNeptune.resizer.Splitter": [],
+  "Gloss.controller.Navigation": [],
   "Ext.ux.ajax.SimXhr": [],
   "Ext.ux.event.RecorderManager": [],
   "Ext.ux.ProgressBarPager": [],
   "Ext.ux.CellDragDrop": [],
   "Gloss.store.resource.Railo": [],
+  "Gloss.view.layout.Center": [],
   "Ext.ux.statusbar.StatusBar": [
     "Ext.ux.StatusBar"
   ],
@@ -65,15 +71,20 @@ Ext.ClassManager.addNameAlternateMappings({
   "ExtThemeNeptune.layout.component.Dock": [],
   "ExtThemeNeptune.panel.Table": [],
   "Ext.ux.grid.menu.RangeMenu": [],
+  "Gloss.model.RailoBug": [],
   "Ext.ux.event.Recorder": [],
   "Ext.ux.RowExpander": [],
   "Ext.ux.event.Player": [],
+  "Gloss.store.resource.RailoBug": [],
+  "Gloss.store.resource.AdobeBug": [],
   "ExtThemeNeptune.panel.Tool": [],
+  "Gloss.view.layout.West": [],
   "Ext.ux.ajax.SimManager": [],
   "Ext.ux.grid.filter.BooleanFilter": [],
   "Ext.ux.ToolbarDroppable": [],
   "Gloss.view.Viewport": [],
   "Ext.ux.event.Maker": [],
+  "Gloss.store.resource.CFLib": [],
   "Ext.ux.TabScrollerMenu": [],
   "ExtThemeNeptune.menu.Separator": [],
   "Ext.ux.IFrame": [],
@@ -82,6 +93,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Gloss.model.Resource": [],
   "Ext.ux.form.SearchField": [],
   "Ext.ux.dd.CellFieldDropZone": [],
+  "Gloss.controller.App": [],
   "Ext.ux.LiveSearchGridPanel": [],
   "Ext.ux.grid.filter.DateFilter": [],
   "Ext.ux.DataTip": [],
@@ -106,12 +118,17 @@ Ext.ClassManager.addNameAliasMappings({
   "ExtThemeNeptune.menu.Menu": [],
   "ExtThemeNeptune.container.ButtonGroup": [],
   "Ext.ux.grid.filter.Filter": [],
+  "Gloss.view.grid.RailoBug": [
+    "widget.grid.railobug"
+  ],
   "Ext.ux.GroupTabRenderer": [
     "plugin.grouptabrenderer"
   ],
-  "Gloss.controller.Main": [],
   "Ext.ux.grid.TransformGrid": [],
   "Ext.ux.ajax.DataSimlet": [],
+  "Gloss.view.Content": [
+    "widget.content"
+  ],
   "Ext.ux.FieldReplicator": [],
   "Gloss.view.menu.Tree": [
     "widget.menu.tree"
@@ -136,6 +153,13 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.GMapPanel": [
     "widget.gmappanel"
   ],
+  "Gloss.view.grid.AdobeBug": [
+    "widget.grid.adobebug"
+  ],
+  "Gloss.model.AdobeBug": [],
+  "Gloss.view.Navigation": [
+    "widget.navigation"
+  ],
   "Ext.ux.form.MultiSelect": [
     "widget.multiselect",
     "widget.multiselectfield"
@@ -143,9 +167,6 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.DataView.LabelEditor": [],
   "Ext.ux.GroupTabPanel": [
     "widget.grouptabpanel"
-  ],
-  "Gloss.view.Main": [
-    "widget.app-main"
   ],
   "Ext.ux.grid.filter.StringFilter": [
     "gridfilter.string"
@@ -161,8 +182,10 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.PreviewPlugin": [
     "plugin.preview"
   ],
+  "Gloss.controller.Base": [],
   "Ext.ux.DataView.Animated": [],
   "ExtThemeNeptune.resizer.Splitter": [],
+  "Gloss.controller.Navigation": [],
   "Ext.ux.ajax.SimXhr": [],
   "Ext.ux.event.RecorderManager": [
     "widget.eventrecordermanager"
@@ -173,6 +196,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Gloss.store.resource.Railo": [
     "store.resource.railo"
+  ],
+  "Gloss.view.layout.Center": [
+    "widget.layout.center"
   ],
   "Ext.ux.statusbar.StatusBar": [
     "widget.statusbar"
@@ -189,10 +215,20 @@ Ext.ClassManager.addNameAliasMappings({
   "ExtThemeNeptune.layout.component.Dock": [],
   "ExtThemeNeptune.panel.Table": [],
   "Ext.ux.grid.menu.RangeMenu": [],
+  "Gloss.model.RailoBug": [],
   "Ext.ux.event.Recorder": [],
   "Ext.ux.RowExpander": [],
   "Ext.ux.event.Player": [],
+  "Gloss.store.resource.RailoBug": [
+    "store.resource.railobug"
+  ],
+  "Gloss.store.resource.AdobeBug": [
+    "store.resource.adobebug"
+  ],
   "ExtThemeNeptune.panel.Tool": [],
+  "Gloss.view.layout.West": [
+    "widget.layout.west"
+  ],
   "Ext.ux.ajax.SimManager": [],
   "Ext.ux.grid.filter.BooleanFilter": [
     "gridfilter.boolean"
@@ -200,6 +236,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.ToolbarDroppable": [],
   "Gloss.view.Viewport": [],
   "Ext.ux.event.Maker": [],
+  "Gloss.store.resource.CFLib": [
+    "store.resource.cflib"
+  ],
   "Ext.ux.TabScrollerMenu": [
     "plugin.tabscrollermenu"
   ],
@@ -216,6 +255,7 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.searchfield"
   ],
   "Ext.ux.dd.CellFieldDropZone": [],
+  "Gloss.controller.App": [],
   "Ext.ux.LiveSearchGridPanel": [],
   "Ext.ux.grid.filter.DateFilter": [
     "gridfilter.date"

@@ -3,7 +3,10 @@ Ext.define('Gloss.view.grid.AdobeBug', {
     alias: 'widget.grid.adobebug',
     requires: [
         'Ext.grid.column.Date',
-        'Ext.toolbar.Paging'
+        'Ext.toolbar.Paging',
+        'Ext.form.field.ComboBox',
+        'Ext.form.Panel',
+        'Ext.form.field.Text'
     ],
     title: 'Adobe ColdFusion Bug Tracker',
     viewConfig: {
@@ -48,6 +51,43 @@ Ext.define('Gloss.view.grid.AdobeBug', {
                 ]
             },
             dockedItems: [
+                {
+                    xtype: 'toolbar',
+                    dock: 'top',
+                    ui: 'footer',
+                    items: [
+                        {
+                            xtype: 'triggerfield',
+                            name: 'Query',
+                            fieldLabel: 'Search',
+                            labelWidth:50,
+                            plugins: [
+                                { ptype: 'cleartrigger' }
+                            ]
+                        },
+                        {
+                            xtype: 'combobox',
+                            name: 'Version',
+                            displayField: 'text',
+                            valueField: 'value',
+                            fieldLabel: 'Version',
+                            store: Ext.create('Ext.data.Store', {
+                                fields: [ 'text', 'value' ],
+                                data: [
+                                    { text:'10.0', value:'10.0' },
+                                    { text:'9.0.1', value:'9.0.1' },
+                                    { text:'9.0', value:'9.0' },
+                                    { text:'8.0.1', value:'8.0.1' },
+                                    { text:'8.0', value:'8.0' }
+                                ]
+                            }),
+                            plugins: [
+                                { ptype: 'cleartrigger' }
+                            ],
+                            labelWidth:50
+                        }
+                    ]
+                },
                 {
                     xtype: 'pagingtoolbar',
                     ui: 'footer',

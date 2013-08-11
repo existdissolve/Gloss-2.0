@@ -42,6 +42,22 @@ Ext.define('Gloss.view.grid.RailoBug', {
             },
             dockedItems: [
                 {
+                    xtype: 'toolbar',
+                    dock: 'top',
+                    ui: 'footer',
+                    items: [
+                        {
+                            xtype: 'triggerfield',
+                            name: 'Query',
+                            fieldLabel: 'Search',
+                            labelWidth:50,
+                            plugins: [
+                                { ptype: 'cleartrigger' }
+                            ]
+                        }
+                    ]
+                },
+                {
                     xtype: 'pagingtoolbar',
                     ui: 'footer',
                     defaultButtonUI: 'default',
