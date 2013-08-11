@@ -5,6 +5,7 @@ Ext.define('Gloss.view.grid.AdobeBug', {
         'Ext.grid.column.Date',
         'Ext.toolbar.Paging'
     ],
+    title: 'Adobe ColdFusion Bug Tracker',
     viewConfig: {
         deferEmptyText: false,
         emptyText: 'Sorry, no bugs matched your search criteria!',

@@ -1,10 +1,11 @@
 /**
 * My Event Handler Hint
 */
-component{
+component extends="Base" {
     property name="AdobeService" inject;
     property name="RailoService" inject;
     property name="CFLibService" inject;
+    property name="cachebox" inject="cachebox";
 
     // OPTIONAL HANDLER PROPERTIES
     this.prehandler_only     = "";
@@ -42,18 +43,29 @@ component{
 
     // Index
     public Any function index( required Any event, required Struct rc, required Struct prc ) {
-        // switch on menu type
-        switch( arguments.rc.type ) {
-            case "Adobe":
-                var menu = AdobeService.buildMenu();
-                break;
-            case "Railo":
-                var menu = RailoService.buildMenu();
-                break;
-            case "CFLib":
-                var menu = CFLibService.buildMenu();
-                break;
+        var key = "menu-" & arguments.rc.type;
+        // get default cache
+        var cache = cachebox.getDefaultCache();
+        // if item exists in cache...
+        if( cache.lookup( key ) ) {
+            var menu = cache.get( key );
         }
-        event.renderData( data=menu, type="json" );
+        // not in cache
+        else {
+            switch( arguments.rc.type ) {
+                case "Adobe":
+                    var menu = AdobeService.buildMenu();
+                    break;
+                case "Railo":
+                    var menu = RailoService.buildMenu();
+                    break;
+                case "CFLib":
+                    var menu = CFLibService.buildMenu();
+                    break;
+            }
+            // add to cache
+            cache.set( key, menu, 0 );
+        }  
+        prc.jsonData = menu;
     }
 }

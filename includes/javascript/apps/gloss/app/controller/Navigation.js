@@ -5,8 +5,6 @@ Ext.define('Gloss.controller.Navigation', {
     extend: 'Gloss.controller.Base',
     views: [
         'menu.Tree',
-        'Navigation',
-        'Content',
         'grid.AdobeBug',
         'grid.RailoBug'
     ],
@@ -18,9 +16,9 @@ Ext.define('Gloss.controller.Navigation', {
         'resource.RailoBug'
     ],
     refs: [
-        { ref:'Content', selector:'[xtype=content]' },
+        { ref:'CenterRegion', selector:'[xtype=layout.center]' },
         { ref:'AdobeBugGrid', selector:'[xtype=grid.adobebug' },
-        { ref:'RailoBugGrid', selector:'[xtype=grid.railobug' }
+        { ref:'RailoBugGrid', selector:'[xtype=grid.railobug' }        
     ],
     init: function() {
         this.listen({
@@ -38,14 +36,94 @@ Ext.define('Gloss.controller.Navigation', {
                 'treepanel#BugNav': {
                     itemclick: this.onBugNavClick
                 },
-                'grid[xtype=grid.adobebug]': {
-
+                '[xtype=layout.center] grid[xtype*=bug]': {
+                    beforerender: this.onBugGridLoad
                 }
             },
             global: {},
             store: {}
         });
         this.callParent();
+    },
+    /**
+     * Loads content for a selected navigation item
+     * @param {Ext.data.Model} record
+     * @param {String} type
+     */
+    loadContent: function( record, type ) {
+        var me = this,
+            itemId = record.get( 'ResourceID' );
+        // make sure that this has content of some kind
+        if( itemId > 0 ) {
+            // check if this content already exists in the region
+            if( me.contentExists( itemId ) ) {
+                return false;
+            }
+            Ext.Ajax.request({
+                url: '/api/content/' + type,
+                method: 'GET',
+                params: {
+                    ResourceID: itemId
+                },
+                success: function( request, options ) {
+                    var content = Ext.widget( 'panel', {
+                        title: record.get( 'text' ),
+                        html: Ext.decode( request.responseText ),
+                        itemId: itemId
+                    });
+                    me.updateCenterContent( content, itemId );
+                },
+                failure: function( request, options ) {
+
+                }
+            });
+        }
+    },
+    /**
+     * Loads grid for the selected bug resource
+     * @param {String} type
+     */
+    loadBugGrid: function( type ) {
+        var me = this,
+            targetXType = type=='AdobeBug' ? 'grid.adobebug' : 'grid.railobug';
+        // create the widget
+        var grid = Ext.widget( targetXType, {
+            itemId: type
+        });
+        // add grid to center region
+        me.updateCenterContent( grid, type );
+    },
+    /**
+     * Smartly updates main center region of application with passed content
+     * @param {Ext.Component} content
+     * @param {String/Number} itemId
+     */
+    updateCenterContent: function( content, itemId ) {
+        var me = this,
+            center = me.getCenterRegion();
+
+        // check if this content already exists in the region
+        if( me.contentExists( itemId ) ) {
+            return false;
+        }
+        // suspend layouts
+        Ext.suspendLayouts();
+        // remove and destroy all center region content
+        center.removeAll( true );
+        // add passed content
+        center.add( content );
+        // resume layouts and flush batched layout changes
+        Ext.resumeLayouts( true );
+    },
+    /**
+     * Checks if requested content has already been rendered
+     * @param {String/Number} itemId
+     */
+    contentExists: function( itemId ) {
+        var me = this,
+            center = me.getCenterRegion();
+        // return match
+        return !Ext.isEmpty( center.down( '[itemId=' + itemId + ']' ) ) ? true : false;
     },
     /**
      * Handles click events on Bug menu items
@@ -55,7 +133,7 @@ Ext.define('Gloss.controller.Navigation', {
      * @param HTMLElement item
      * @param {Number} index
      * @param {Ext.EventObject} e
-     * @param {Object}
+     * @param {Object} eOpts
      */
     onBugNavClick: function( view, record, item, index, e, eOpts ) {
         var me = this,
@@ -74,7 +152,7 @@ Ext.define('Gloss.controller.Navigation', {
      * @param HTMLElement item
      * @param {Number} index
      * @param {Ext.EventObject} e
-     * @param {Object}
+     * @param {Object} eOpts
      */
     onAdobeNavClick: function( view, record, item, index, e, eOpts ) {
         var me = this;
@@ -91,7 +169,7 @@ Ext.define('Gloss.controller.Navigation', {
      * @param HTMLElement item
      * @param {Number} index
      * @param {Ext.EventObject} e
-     * @param {Object}
+     * @param {Object} eOpts
      */
     onRailoNavClick: function( view, record, item, index, e, eOpts ) {
         var me = this;
@@ -108,7 +186,7 @@ Ext.define('Gloss.controller.Navigation', {
      * @param HTMLElement item
      * @param {Number} index
      * @param {Ext.EventObject} e
-     * @param {Object}
+     * @param {Object} eOpts
      */
     onCFLibNavClick: function( view, record, item, index, e, eOpts ) {
         var me = this;
@@ -118,45 +196,15 @@ Ext.define('Gloss.controller.Navigation', {
         me.loadContent( record, 'CFLib' );
     },
     /**
-     * Loads content for a selected navigation item
-     * @param {Ext.data.Model} record
-     * @param {String} type
+     * Handles grid render events for bug-based grids
+     * @private
+     * @param {Ext.grid.Panel} grid
+     * @param {Object} eOpts
      */
-    loadContent: function( record, type ) {
+    onBugGridLoad: function( grid, eOpts ) {
         var me = this,
-            content = me.getContent();
-        // make sure that this has content of some kind
-        if( record.get( 'contentid' ) > 0 ) {
-            Ext.Ajax.request({
-                url: '/api/content/' + type,
-                method: 'GET',
-                params: {
-                    ResourceID: record.get( 'contentid' )
-                },
-                success: function( request, options ) {
-                    var text = request.responseText;
-                    content.setTitle( record.get( 'text' ) );
-                    content.update( Ext.decode( text ) );
-                },
-                failure: function( request, options ) {
-
-                }
-            });
-        }
-    },
-    /**
-     * Loads grid for the selected bug resource
-     * @param {String} type
-     */
-    loadBugGrid: function( type ) {
-        var me = this,
-            tabpanel = me.getContent(),
-            targetXType = type=='AdobeBug' ? 'grid.adobebug' : 'grid.railobug';
-        // create the widget
-        var grid = Ext.widget( targetXType );
-        // add grid to panel
-        tabpanel.add( grid );
+            store = grid.getStore();
         // load store
-        grid.getStore().load();
+        store.load();
     }
 });

@@ -1,13 +1,19 @@
 Ext.define('Gloss.view.Viewport', {
     extend: 'Ext.container.Viewport',
     requires:[
-        'Ext.layout.container.Fit',
-        'Gloss.view.Navigation'
+        'Gloss.view.layout.Center',
+        'Gloss.view.layout.West',
+        'Ext.layout.container.Border'
     ],
     layout: {
-        type: 'fit'
+        type: 'border'
     },
-    items: [{
-        xtype: 'navigation'
-    }]
+    items: [
+        {   
+            xtype: 'layout.west'
+        },
+        {   
+            xtype: 'layout.center'
+        }
+    ]
 });

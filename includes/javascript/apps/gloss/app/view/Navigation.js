@@ -70,13 +70,8 @@ Ext.define('Gloss.view.Navigation', {
                 },
                 {
                     region: 'center',
-                    xtype: 'tabpanel',
-                    items:[
-                        {
-                            xtype: 'content',
-                            title: 'Center Tab 1'
-                        }
-                    ]
+                    xtype: 'content',
+                    title: 'Center Tab 1'
                 }
             ]
         });

@@ -5,6 +5,7 @@ Ext.define('Gloss.view.grid.RailoBug', {
         'Ext.grid.column.Date',
         'Ext.toolbar.Paging'
     ],
+    title: 'Railo Issue Tracker',
     viewConfig: {
         deferEmptyText: false,
         emptyText: 'Sorry, no bugs matched your search criteria!',

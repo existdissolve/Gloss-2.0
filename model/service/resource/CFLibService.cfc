@@ -60,7 +60,7 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
                 var node = {
                     "text" = child.getTitle(),
                     "href" = child.getSlug(),
-                    "contentid" = child.getResourceID(),
+                    "ResourceID" = child.getResourceID(),
                     "leaf" = true,
                     "qtip" = child.getDescription()
                 };

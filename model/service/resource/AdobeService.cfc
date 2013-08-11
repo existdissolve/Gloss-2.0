@@ -68,7 +68,7 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
                 var node = {
                     "href" = item.getSlug(),
                     "text" = item.getTitle(),
-                    "contentid" = item.getResourceID(),
+                    "ResourceID" = item.getResourceID(),
                     "qtip" = item.getTitle()
                 };
                 // if children, build them recursively

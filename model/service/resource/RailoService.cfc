@@ -162,7 +162,7 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
             var node = {
                 "href" = tag.getSlug(),
                 "text" = tag.getTitle(),
-                "contentid" = tag.getResourceID(),
+                "ResourceID" = tag.getResourceID(),
                 "qtip" = tag.getTitle(),
                 "leaf" = true
             };
@@ -199,7 +199,7 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
             var node = {
                 "href" = fn.getSlug(),
                 "text" = fn.getTitle(),
-                "contentid" = fn.getResourceID(),
+                "ResourceID" = fn.getResourceID(),
                 "qtip" = fn.getTitle(),
                 "leaf" = true
             };
@@ -234,7 +234,7 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
             var node = {
                 "href" = obj.getSlug(),
                 "text" = obj.getTitle(),
-                "contentid" = obj.getResourceID(),
+                "ResourceID" = obj.getResourceID(),
                 "qtip" = obj.getTitle(),
                 "leaf" = true
             };
