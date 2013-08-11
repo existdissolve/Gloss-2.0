@@ -1,5 +1,6 @@
 Ext.define('Gloss.view.Content', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.content',
-    autoScroll: true
+    autoScroll: true,
+    layout: 'fit'
 });

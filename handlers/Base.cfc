@@ -26,6 +26,10 @@ component {
 				arguments.rc.criteria[ "query" ] = arguments.rc.query;
 			}
 		}
+		if( structKeyExists( arguments.rc, "sortOrder" ) ) {
+			var sorter = deserializeJSON( arguments.rc.sortOrder );
+			rc.sortOrder = "#sorter[1].property# #sorter[1].direction#";
+		}
 	}
 
 	function postHandler( required Any event, required Struct rc, required Struct prc ){

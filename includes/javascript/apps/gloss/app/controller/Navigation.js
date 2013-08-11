@@ -6,10 +6,21 @@ Ext.define('Gloss.controller.Navigation', {
     views: [
         'menu.Tree',
         'Navigation',
-        'Content'
+        'Content',
+        'grid.AdobeBug',
+        'grid.RailoBug'
+    ],
+    stores: [
+        'resource.Adobe',
+        'resource.Railo',
+        'resource.CFLib',
+        'resource.AdobeBug',
+        'resource.RailoBug'
     ],
     refs: [
-        { ref:'Content', selector:'[xtype=content]' }
+        { ref:'Content', selector:'[xtype=content]' },
+        { ref:'AdobeBugGrid', selector:'[xtype=grid.adobebug' },
+        { ref:'RailoBugGrid', selector:'[xtype=grid.railobug' }
     ],
     init: function() {
         this.listen({
@@ -23,12 +34,37 @@ Ext.define('Gloss.controller.Navigation', {
                 },
                 'treepanel#CFLibNav': {
                     itemclick: this.onCFLibNavClick
+                },
+                'treepanel#BugNav': {
+                    itemclick: this.onBugNavClick
+                },
+                'grid[xtype=grid.adobebug]': {
+
                 }
             },
             global: {},
             store: {}
         });
         this.callParent();
+    },
+    /**
+     * Handles click events on Bug menu items
+     * @private
+     * @param {Ext.view.View} view
+     * @param {Ext.data.Model} record
+     * @param HTMLElement item
+     * @param {Number} index
+     * @param {Ext.EventObject} e
+     * @param {Object}
+     */
+    onBugNavClick: function( view, record, item, index, e, eOpts ) {
+        var me = this,
+            type = index==0 ? 'AdobeBug' : 'RailoBug';
+        // stop the event
+        e.stopEvent();
+        
+        // call load content
+        me.loadBugGrid( type );
     },
     /**
      * Handles click events on Adobe menu items
@@ -83,8 +119,8 @@ Ext.define('Gloss.controller.Navigation', {
     },
     /**
      * Loads content for a selected navigation item
-     * @param {Ext.data.Model}
-     * @param {String}
+     * @param {Ext.data.Model} record
+     * @param {String} type
      */
     loadContent: function( record, type ) {
         var me = this,
@@ -107,5 +143,20 @@ Ext.define('Gloss.controller.Navigation', {
                 }
             });
         }
+    },
+    /**
+     * Loads grid for the selected bug resource
+     * @param {String} type
+     */
+    loadBugGrid: function( type ) {
+        var me = this,
+            tabpanel = me.getContent(),
+            targetXType = type=='AdobeBug' ? 'grid.adobebug' : 'grid.railobug';
+        // create the widget
+        var grid = Ext.widget( targetXType );
+        // add grid to panel
+        tabpanel.add( grid );
+        // load store
+        grid.getStore().load();
     }
 });

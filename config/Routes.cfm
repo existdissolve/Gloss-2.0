@@ -15,6 +15,9 @@
         setBaseURL("http://#cgi.HTTP_HOST#/#getSetting('AppMapping')#/index.cfm");
     }
     // Your Application Routes
+    addRoute( pattern="/api/bug/railobug", handler="Bug", action={ GET="index" }, matchVariables="type=RailoBug" );
+    addRoute( pattern="/api/bug/adobebug", handler="Bug", action={ GET="index" }, matchVariables="type=AdobeBug" );
+
     addRoute( pattern="/api/menu/railo", handler="Menu", action={ GET="index" }, matchVariables="type=Railo" );
     addRoute( pattern="/api/menu/adobe", handler="Menu", action={ GET="index" }, matchVariables="type=Adobe" );
     addRoute( pattern="/api/menu/cflib", handler="Menu", action={ GET="index" }, matchVariables="type=CFLib" );

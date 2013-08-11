@@ -76,21 +76,3 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
         return items;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

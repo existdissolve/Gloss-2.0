@@ -7,10 +7,5 @@ Ext.define('Gloss.Application', {
     controllers: [
         'App',
         'Navigation'
-    ],
-    stores: [
-        'resource.Adobe',
-        'resource.Railo',
-        'resource.CFLib'
     ]
 });
