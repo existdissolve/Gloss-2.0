@@ -1,10 +1,37 @@
 component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
+    property name="jSoup" inject="javaLoader:org.jsoup.Jsoup";
+    property name="cachebox" inject="cachebox";
+
     /**
      * Constructor
      */
     public AdobeBugService function init() {
         super.init( entityName="AdobeBug" );        
         return this;
+    }
+
+    /**
+     * Retrieves content from cache or remote source
+     * @resource {model.orm.resource.AdobeBug} The resource for which to retrieve content
+     * return String
+     */
+    public String function getContent( required model.orm.resource.AdobeBug resource ) {
+        var key = arguments.resource.buildContentCacheKey();
+        var content = "";
+        // get default cache
+        var cache = cachebox.getDefaultCache();
+        // if item exists in cache...
+        if( cache.lookup( key ) ) {
+            content = cache.get( key );
+        }
+        // not in cache; retrieve it remotely
+        else {
+            // parse html
+            content = scrapeContent( resource.getLink() );
+            // add to cache
+            cache.set( key, content, 0 );
+        }         
+        return content;
     }
 
     /**
@@ -51,7 +78,6 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
         var items = [];
         // http service
         var httpService = new http();
-        /*https://bugbase.adobe.com/index.cfm?event=qSearchBugs&page=2&pageSize=25&gridsortcolumn=&gridsortdirection=ASC&type=Bugs&product=1149&version=7770&prodArea=null&state=null&status=null&reason=null&numFiles=&numFilesOp=%3D&numVotes=&numVotesOp=%3D&creationDate=&creationDateOp=%3D&priority=null&failureType=null&frequency=null&reportedBy=&fixedInBuild=&foundInBuild=&appLanguage=%2D&osLanguage=%2D&platform=%2D&browser=%2D&title=&description=&testConfig=&_cf_nodebug=true&_cf_nocache=true&_cf_clientid=A950058665A294BBED9D77598D34F009&_cf_rc=17*/
             httpService.setURL( "https://bugbase.adobe.com/index.cfm" );
             httpService.addParam( type="URL", name="event", value="qSearchBugs" );
             httpService.addParam( type="URL", name="page", value="1" );
@@ -74,5 +100,43 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
             });
         }
         return items;
+    }
+
+    /**
+     * Scrapes content from remote page and processes with jSoup library
+     * @html The html content to parse
+     * return String
+     */
+    private String function scrapeContent( required String url ) {
+        var returnHTML = "";
+        // retrieve content 
+        var httpService = new http();
+            httpService.setURL( arguments.url );
+        var html = httpService.send().getPrefix().fileContent;
+        // parse the results
+        var jsoupDocument = jSoup.parse( html );
+        // get by selector
+        matchedHTML = jsoupDocument.select( "div.content" );
+        // if we have a match...
+        if( isArray( matchedHTML ) && arrayLen( matchedHTML ) ) {
+            // define "remove" selectors
+            var removeList = [ "div.notLoggedIn", "div##votes", "div##comment", "h3:contains(Attachments)", "div.listed.last" ];
+            // loop over remove selectors
+            for( var item in removeList ) {
+                var removeMatches = matchedHTML.select( item );
+                // loop over matches
+                for( var match in removeMatches ) {
+                    // remove the match
+                    match.remove();
+                }
+            }
+            // fix pre elements
+            var pres = matchedHTML.select( 'pre' );
+            for( var pre in pres ) {
+                pre.attr( "class", "gloss_code" );
+            }
+            returnHTML = matchedHTML.html();
+        }
+        return returnHTML;
     }
 }

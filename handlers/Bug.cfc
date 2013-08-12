@@ -45,7 +45,7 @@ component extends="Base" {
         event.paramValue( "max", "25" );
         event.paramValue( "offset", "0" );
         event.paramValue( "sortOrder", "CreatedDate DESC" );
-        // switch on menu type
+        // switch on bug type
         switch( arguments.rc.type ) {
             case "AdobeBug":
                 // get criteria
@@ -94,5 +94,25 @@ component extends="Base" {
             "data" = EntityUtils.parseEntity( entity=data, simpleValues=true ),
             "total" = total
         };
+    }
+
+    public Any function detail( required Any event, required Struct rc, required Struct prc ) {
+        var content = "";
+        // switch on bug type
+        switch( arguments.rc.type ) {
+            case "AdobeBug":
+                var resource = AdobeBugService.get( rc.ResourceID );
+                if( !isNull( resource ) ) {
+                    content = AdobeBugService.getContent( resource );                 
+                }
+                break;
+            case "RailoBug":
+                var resource = RailoBugService.get( rc.ResourceID );
+                if( !isNull( resource ) ) {
+                    content = RailoBugService.getContent( resource );                  
+                }
+                break;
+        }
+        prc.jsonData = content;
     }
 }

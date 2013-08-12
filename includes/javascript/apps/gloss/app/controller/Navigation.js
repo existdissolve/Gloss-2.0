@@ -6,7 +6,8 @@ Ext.define('Gloss.controller.Navigation', {
     views: [
         'menu.Tree',
         'grid.AdobeBug',
-        'grid.RailoBug'
+        'grid.RailoBug',
+        'Bug'
     ],
     stores: [
         'resource.Adobe',
@@ -18,7 +19,9 @@ Ext.define('Gloss.controller.Navigation', {
     refs: [
         { ref:'CenterRegion', selector:'[xtype=layout.center]' },
         { ref:'AdobeBugGrid', selector:'[xtype=grid.adobebug]' },
-        { ref:'RailoBugGrid', selector:'[xtype=grid.railobug]' }        
+        { ref:'RailoBugGrid', selector:'[xtype=grid.railobug]' },
+        { ref:'BugBorder', selector:'[xtype=bug]' },
+        { ref:'BugDetail', selector:'[itemId=Details]'}        
     ],
     init: function() {
         this.listen({
@@ -38,6 +41,12 @@ Ext.define('Gloss.controller.Navigation', {
                 },
                 '[xtype=layout.center] grid[xtype*=bug]': {
                     beforerender: this.onBugGridLoad
+                },
+                '[xtype=layout.center] grid[xtype=grid.adobebug]': {
+                    itemclick: this.onAdobeBugGridItemClick
+                },
+                '[xtype=layout.center] grid[xtype=grid.railobug]': {
+                    itemclick: this.onRailoBugGridItemClick
                 },
                 '[xtype=layout.center] grid[xtype*=bug] toolbar[dock=top] field': {
                     change: this.onBugGridSearch
@@ -83,18 +92,56 @@ Ext.define('Gloss.controller.Navigation', {
         }
     },
     /**
+     * Loads content for a selected bug
+     * @param {Ext.data.Model} record
+     * @param {String} type
+     */
+    loadBugContent: function( record, type ) {
+        var me = this,
+            itemId = record.get( 'ResourceID' );
+        // make sure that this has content of some kind
+        if( itemId > 0 ) {
+            // check if this content already exists in the region
+            if( me.contentExists( itemId ) ) {
+                return false;
+            }
+            Ext.Ajax.request({
+                url: '/api/bug/' + type + '/' + itemId,
+                method: 'GET',
+                success: function( request, options ) {
+                    var detail = me.getBugDetail(),
+                        title = type=='AdobeBug' ? 'Bug ' + record.get( 'DefectID' ) : record.get( 'Slug' );
+                    // update detail panel
+                    detail.update( Ext.decode( request.responseText ) );
+                    // set title
+                    detail.setTitle( title );
+                    // expand if collapsed
+                    detail.expand();
+                },
+                failure: function( request, options ) {
+
+                }
+            });
+        }
+    },
+    /**
      * Loads grid for the selected bug resource
      * @param {String} type
      */
     loadBugGrid: function( type ) {
         var me = this,
-            targetXType = type=='AdobeBug' ? 'grid.adobebug' : 'grid.railobug';
+            targetXType = type=='AdobeBug' ? 'grid.adobebug' : 'grid.railobug',
+            grid,
+            border;
         // create the widget
-        var grid = Ext.widget( targetXType, {
+        border = Ext.create( 'Gloss.view.Bug' );
+        border.add({
+            xtype: targetXType,
+            region: 'center',
             itemId: type
         });
         // add grid to center region
-        me.updateCenterContent( grid, type );
+        me.updateCenterContent( border, type );
     },
     /**
      * Applies filters to bug grid
@@ -267,5 +314,33 @@ Ext.define('Gloss.controller.Navigation', {
         else {
             me.clearBugGridSearch( type );
         }
+    },
+    /**
+     * Handles click events on Bug grid items
+     * @private
+     * @param {Ext.view.View} view
+     * @param {Ext.data.Model} record
+     * @param HTMLElement item
+     * @param {Number} index
+     * @param {Ext.EventObject} e
+     * @param {Object} eOpts
+     */
+    onAdobeBugGridItemClick: function( view, record, item, index, e, eOpts ) {
+        var me = this;
+        me.loadBugContent( record, 'AdobeBug' );
+    },
+    /**
+     * Handles click events on Bug grid items
+     * @private
+     * @param {Ext.view.View} view
+     * @param {Ext.data.Model} record
+     * @param HTMLElement item
+     * @param {Number} index
+     * @param {Ext.EventObject} e
+     * @param {Object} eOpts
+     */
+    onRailoBugGridItemClick: function( view, record, item, index, e, eOpts ) {
+        var me = this;
+        me.loadBugContent( record, 'RailoBug' );
     }
 });
