@@ -104,7 +104,7 @@ component extends="coldbox.system.orm.hibernate.VirtualEntityService" {
 
     /**
      * Scrapes content from remote page and processes with jSoup library
-     * @html The html content to parse
+     * @url The url to scrape
      * return String
      */
     private String function scrapeContent( required String url ) {
