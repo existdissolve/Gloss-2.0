@@ -17,15 +17,6 @@ Ext.define('Gloss.view.Bug', {
                     collapsed: true,
                     collapsible: true,
                     split: true
-                },
-                {
-                    xtype: 'panel',
-                    region: 'east',
-                    title: 'Comments',
-                    minWidth:200,
-                    collapsed: true,
-                    collapsible: true,
-                    split: true
                 }
             ]
         });

@@ -22,6 +22,7 @@ Ext.define('Gloss.view.layout.West', {
             items: [
                 {
                     xtype: 'menu.tree',
+                    collapsed: true,
                     itemId: 'AdobeNav',
                     title: 'Adobe ColdFusion',
                     store: Ext.create( 'Gloss.store.resource.Adobe' )

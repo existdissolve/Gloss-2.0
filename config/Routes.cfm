@@ -28,5 +28,7 @@
     addRoute( pattern="/api/content/adobe", handler="Content", action={ GET="index" }, matchVariables="type=Adobe" );
     addRoute( pattern="/api/content/cflib", handler="Content", action={ GET="index" }, matchVariables="type=CFLib" );
 
+    addRoute( pattern="/api/user", handler="User", action={ POST="register" } );
+
     addRoute(pattern=":handler/:action?");
 </cfscript>

@@ -6,11 +6,36 @@
     <!-- <x-compile> -->
         <!-- <x-bootstrap> -->
             <link rel="stylesheet" href="bootstrap.css">
+            <link rel="stylesheet" href="style.css">
             <script src="ext/ext-dev.js"></script>
             <script src="bootstrap.js"></script>
         <!-- </x-bootstrap> -->
         <script src="app.js"></script>
     <!-- </x-compile> -->
 </head>
-<body></body>
+<body>
+    <!-- Place this asynchronous JavaScript just before your </body> tag -->
+    <script type="text/javascript">
+        function signinCallback( authResult ) {
+            if ( authResult[ 'access_token' ] ) {
+                // Successfully authorized
+                // Hide the sign-in button now that the user is authorized, for example:
+                Ext.get( 'signinButton' ).setDisplayed( false );
+                Ext.globalEvents.fireEvent( 'loggedin', authResult );
+            } 
+            else if ( authResult[ 'error' ] ) {
+                // There was an error.
+                // Possible error codes:
+                //   "access_denied" - User denied access to your app
+                //   "immediate_failed" - Could not automatically log in the user
+                // console.log('There was an error: ' + authResult['error']);
+            }
+        }
+        (function() {
+            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+            po.src = 'https://apis.google.com/js/client:plusone.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        })();
+    </script>
+</body>
 </html>

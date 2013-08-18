@@ -63,6 +63,19 @@
 /* including package ext-theme-neutral */
 /* including package ext-theme-neptune */
 /* including package sleek */
+/* line 2, ../../../../packages/sleek/sass/etc/all.scss */
+.loggedin img {
+  height: 25px;
+  width: 25px;
+  float: left;
+  margin-right: 10px;
+}
+
+/* line 3, ../../../../packages/sleek/sass/etc/all.scss */
+.loggedin span {
+  font-weight: bold;
+}
+
 /* including package sleek */
 /* including package ext-theme-neptune */
 /**

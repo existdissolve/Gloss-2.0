@@ -45,6 +45,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.ux.DataView.LabelEditor": [],
   "Ext.ux.GroupTabPanel": [],
   "Ext.ux.grid.filter.StringFilter": [],
+  "Gloss.ux.form.field.plugin.ClearTrigger": [],
   "Ext.ux.statusbar.ValidationStatus": [],
   "ExtThemeNeptune.grid.column.RowNumberer": [],
   "Ext.ux.layout.Center": [],
@@ -65,6 +66,7 @@ Ext.ClassManager.addNameAlternateMappings({
   ],
   "Ext.ux.ajax.Simlet": [],
   "Ext.ux.SlidingPager": [],
+  "Gloss.view.Bug": [],
   "Ext.ux.TabReorderer": [],
   "Ext.ux.grid.filter.NumericFilter": [],
   "Gloss.Application": [],
@@ -171,6 +173,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.ux.grid.filter.StringFilter": [
     "gridfilter.string"
   ],
+  "Gloss.ux.form.field.plugin.ClearTrigger": [
+    "plugin.cleartrigger"
+  ],
   "Ext.ux.statusbar.ValidationStatus": [],
   "ExtThemeNeptune.grid.column.RowNumberer": [],
   "Ext.ux.layout.Center": [
@@ -207,6 +212,9 @@ Ext.ClassManager.addNameAliasMappings({
     "simlet.basic"
   ],
   "Ext.ux.SlidingPager": [],
+  "Gloss.view.Bug": [
+    "widget.bug"
+  ],
   "Ext.ux.TabReorderer": [],
   "Ext.ux.grid.filter.NumericFilter": [
     "gridfilter.numeric"

@@ -4,7 +4,8 @@
  Ext.define('Gloss.controller.App', {
     extend: 'Gloss.controller.Base',
     views: [
-        'Viewport'
+        'Viewport',
+        'user.Widget'
     ],
     refs: [
         {
@@ -15,9 +16,14 @@
     init: function() {
         this.listen({
             controller: {},
-            component: {},
+            component: {
+                'button#logout': {
+                    click: this.handleLogout
+                }
+            },
             global: {
-                applicationready: this.setupApplication
+                applicationready: this.setupApplication,
+                loggedin: this.handleLogin
             },
             store: {}
         });
@@ -40,6 +46,23 @@
         Ext.util.History.on( 'change', function( token ){
             Ext.globalEvents.fireEvent( 'tokenchange', token );
         });
+        // show signin button
+        var obj = Ext.DomHelper.createHtml( {
+            id: 'signinButton',
+            tag: 'span',
+            children: [
+                {
+                    tag: 'span',
+                    cls: 'g-signin',
+                    'data-callback': 'signinCallback',
+                    'data-clientid': '844440950130.apps.googleusercontent.com',
+                    'data-cookiepolicy': 'single_host_origin',
+                    'data-requestvisibleactions': 'http://schemas.google.com/AddActivity',
+                    'data-scope': 'https://www.googleapis.com/auth/plus.login'
+                }
+            ]
+        })
+        Ext.getCmp( 'user' ).update( obj.toString() )
     },
     /**
      * Add history token to Ext.util.History
@@ -50,5 +73,71 @@
         if( !Ext.isEmpty( token ) && token != 'logout' ) {
             Ext.util.History.add( token );
         }
+    },
+    /**
+     * Post Google+ login
+     * @param {Object} authResult
+     */
+    handleLogin: function( authResult ) {
+        var me = this,
+            spec;
+        // add token to Gloss application
+        Gloss.app.user.access_token = authResult.access_token;
+        Gloss.app.user.client_id = authResult.client_id;
+        // request details about user
+        gapi.client.load( 'plus', 'v1', function(){
+            var request = gapi.client.plus.people.get({
+                'userId': 'me'
+            });
+            request.execute( function( response ) {
+                console.log( response )
+                // set more details into app
+                Gloss.app.user.displayName = response.displayName;
+                Gloss.app.user.nickname = response.nickname;
+                Gloss.app.user.imageURL50 = response.image.url;
+                Gloss.app.user.imageURL16 = response.image.url.replace( '50', '16' );
+                Gloss.app.user.id = response.id;
+                // now that we have the data, we need to either register the user or update existing user
+                Ext.Ajax.request({
+                    url: '/api/user/',
+                    method: 'POST',
+                    params: {
+                        AppID: response.id,
+                        DisplayName: response.displayName,
+                        ImageURL: response.image.url,
+                        UserType: 'Google+'
+                    },
+                    success: function( response, opts ) {
+                        console.log( response.responseText );
+                        // add user button and menu
+                        Ext.getCmp( 'user' ).add({
+                            xtype: 'splitbutton',
+                            text: Gloss.app.user.displayName,
+                            icon: Gloss.app.user.imageURL16,
+                            menu: Ext.create('Gloss.view.user.Widget')
+                        })
+                    }
+                })
+            });
+        });
+    },
+    /**
+     * Log the user out and revoke access for application
+     */
+    handleLogout: function() {
+        Ext.data.JsonP.request({
+            url: 'https://accounts.google.com/o/oauth2/revoke',
+            timeout: 1000,
+            params: {
+                token: Gloss.app.user.access_token
+            },
+            callback: function() {
+                Ext.getCmp( 'user' ).down( 'splitbutton' ).destroy();
+                Ext.get( 'signinButton' ).setDisplayed( true );
+            },
+            error: function( e ) {
+                console.log( 'fail' )
+            }
+        });
     }
  })

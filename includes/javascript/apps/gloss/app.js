@@ -18,6 +18,7 @@ Ext.application({
     launch: function( args ) {
         // "this" = Ext.app.Application
         var me = this;
+        me.user = {};
         Ext.globalEvents.fireEvent( 'applicationready' );
     }
 });
