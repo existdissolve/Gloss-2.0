@@ -18,7 +18,8 @@ component{
 
     // REST Allowed HTTP Methods Ex: this.allowedMethods = {delete='POST,DELETE',index='GET'}
     this.allowedMethods = {
-        index = "GET"
+        index = "GET",
+        openGraph = "GET"
     };
     
     /**
@@ -67,5 +68,23 @@ component{
                 break;
         }
         event.renderData( data=content, type="json" );
+    }
+
+    public Any function openGraph( required Any event, required Struct rc, required Struct prc ) {
+        switch( arguments.rc.type ) {
+            case "Adobe":
+                var resource = AdobeService.get( rc.ResourceID );
+                break;
+            case "Railo":
+                var resource = RailoService.get( rc.ResourceID );
+                break;
+            case "CFLib":
+                var resource = CFLibService.get( rc.ResourceID );
+                break;
+        }
+        if( !isNull( resource ) ) {
+            rc.content = resource;
+            event.setView( view="", layout="OpenGraph" );
+        }
     }
 }

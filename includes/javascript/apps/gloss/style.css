@@ -16,3 +16,20 @@
     display: block;
     background-size: 100%;
 }
+@font-face {
+    font-family: 'sencha-tools';
+    src: url("build/Gloss/production/resources/icons/sencha-tools/sencha-tools.eot");
+    src: url("build/Gloss/production/resources/icons/sencha-tools/sencha-tools.eot?#iefix") format("embedded-opentype"), 
+         url("build/Gloss/production/resources/icons/sencha-tools/sencha-tools.woff") format("woff"), 
+         url("build/Gloss/production/resources/icons/sencha-tools/sencha-tools.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+a.x-menu-item-link [class^="icon-"], a.x-menu-item-link [class*=" icon-"] {
+    display: inline;
+    font-size: 16px;
+    left: 5px;
+    top: 3px;
+    color: #999;
+}
+.x-btn-icon-el {font-size: 16px;color: #999;}

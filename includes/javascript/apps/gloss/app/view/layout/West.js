@@ -23,19 +23,19 @@ Ext.define('Gloss.view.layout.West', {
                 {
                     xtype: 'menu.tree',
                     collapsed: true,
-                    itemId: 'AdobeNav',
+                    itemId: 'Adobe',
                     title: 'Adobe ColdFusion',
                     store: Ext.create( 'Gloss.store.resource.Adobe' )
                 },
                 {
                     xtype: 'menu.tree',
-                    itemId: 'RailoNav',
+                    itemId: 'Railo',
                     title: 'Railo',
                     store: Ext.create( 'Gloss.store.resource.Railo' )
                 },
                 {
                     xtype: 'menu.tree',
-                    itemId: 'CFLibNav',
+                    itemId: 'CFLib',
                     title: 'CFLib.org',
                     store: Ext.create( 'Gloss.store.resource.CFLib' )
                 },
@@ -47,8 +47,8 @@ Ext.define('Gloss.view.layout.West', {
                         root: {
                             expanded: true,
                             children: [
-                                { text: 'Adobe ColdFusion Bug Tracker', leaf: true, itemId: 'AdobeBug' },
-                                { text: 'Railo Issue Tracker', leaf: true, itemId: 'RailoBug' }
+                                { text: 'Adobe ColdFusion Bug Tracker', leaf: true, itemId: 'Adobe' },
+                                { text: 'Railo Issue Tracker', leaf: true, itemId: 'Railo' }
                             ]
                         }
                     })

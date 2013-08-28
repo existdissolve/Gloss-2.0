@@ -7,7 +7,8 @@ Ext.define('Gloss.controller.Navigation', {
         'menu.Tree',
         'grid.AdobeBug',
         'grid.RailoBug',
-        'Bug'
+        'Bug',
+        'content.View'
     ],
     stores: [
         'resource.Adobe',
@@ -27,13 +28,13 @@ Ext.define('Gloss.controller.Navigation', {
         this.listen({
             controller: {},
             component: {
-                'treepanel#AdobeNav': {
+                'treepanel#Adobe': {
                     itemclick: this.onAdobeNavClick
                 },
-                'treepanel#RailoNav ': {
+                'treepanel#Railo ': {
                     itemclick: this.onRailoNavClick
                 },
-                'treepanel#CFLibNav': {
+                'treepanel#CFLib': {
                     itemclick: this.onCFLibNavClick
                 },
                 'treepanel#BugNav': {
@@ -78,7 +79,7 @@ Ext.define('Gloss.controller.Navigation', {
                     ResourceID: itemId
                 },
                 success: function( request, options ) {
-                    var content = Ext.widget( 'panel', {
+                    var content = Ext.widget( 'content.view', {
                         title: record.get( 'text' ),
                         html: Ext.decode( request.responseText ),
                         itemId: itemId

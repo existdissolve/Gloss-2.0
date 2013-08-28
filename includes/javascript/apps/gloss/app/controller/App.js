@@ -19,11 +19,15 @@
             component: {
                 'button#logout': {
                     click: this.handleLogout
+                },
+                '[xtype=menu.tree]': {
+                    itemclick: this.addHistory
                 }
             },
             global: {
                 applicationready: this.setupApplication,
-                loggedin: this.handleLogin
+                loggedin: this.handleLogin,
+                tokenchange: this.dispatch
             },
             store: {}
         });
@@ -66,13 +70,28 @@
     },
     /**
      * Add history token to Ext.util.History
+     * @param {Ext.tree.View} treeview
+     * @param {Ext.data.Model} record
+     * @param HTMLElement item
+     * @param {Number} index
+     * @param {Ext.EventObject} e
+     * @param {Object} eOpts
+     */
+    addHistory: function( treeview, record, item, e, eOpts ) {
+        var me = this,
+            token = record.get( 'href' ).toLowerCase(),
+            type = treeview.up( 'treepanel' ).itemId.toLowerCase();
+        if( !Ext.isEmpty( token ) ) {
+            Ext.util.History.add( type + '/' + token );
+        }
+    },
+    /**
+     * Handles token change and directs creation of content in center region
      * @param {String} token
      */
-    addHistory: function( token ) {
+    dispatch: function( token ) {
         var me = this;
-        if( !Ext.isEmpty( token ) && token != 'logout' ) {
-            Ext.util.History.add( token );
-        }
+        console.log( token )
     },
     /**
      * Post Google+ login

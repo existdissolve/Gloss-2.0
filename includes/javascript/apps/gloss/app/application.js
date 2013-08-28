@@ -9,6 +9,7 @@ Ext.define('Gloss.Application', {
     extend: 'Ext.app.Application',
     controllers: [
         'App',
-        'Navigation'
+        'Navigation',
+        'Content'
     ]
 });

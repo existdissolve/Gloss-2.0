@@ -14,6 +14,7 @@
     else{
         setBaseURL("http://#cgi.HTTP_HOST#/#getSetting('AppMapping')#/index.cfm");
     }
+    addRoute( pattern="/og/:type/:resourceid", handler="Content", action={ GET="OpenGraph" } );
     // Your Application Routes
     addRoute( pattern="/api/bug/railobug/:resourceid", handler="Bug", action={ GET="detail" }, matchVariables="type=RailoBug" );
     addRoute( pattern="/api/bug/adobebug/:resourceid", handler="Bug", action={ GET="detail" }, matchVariables="type=AdobeBug" );
