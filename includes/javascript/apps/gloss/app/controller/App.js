@@ -82,7 +82,7 @@
             token = record.get( 'href' ).toLowerCase(),
             type = treeview.up( 'treepanel' ).itemId.toLowerCase();
         if( !Ext.isEmpty( token ) ) {
-            Ext.util.History.add( type + '/' + token );
+            Ext.util.History.add( type + '/' + token, true, true );
         }
     },
     /**
@@ -91,7 +91,7 @@
      */
     dispatch: function( token ) {
         var me = this;
-        console.log( token )
+        Ext.globalEvents.fireEvent( 'dispatch', token );
     },
     /**
      * Post Google+ login

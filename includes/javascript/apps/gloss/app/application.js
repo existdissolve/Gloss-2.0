@@ -4,7 +4,8 @@ Ext.define('Gloss.Application', {
         'Ext.util.History',
         'Ext.data.JsonP',
         'Gloss.ux.form.field.plugin.ClearTrigger',
-        'overrides.data.JsonP'
+        'overrides.data.JsonP',
+        'overrides.util.History'
     ],
     extend: 'Ext.app.Application',
     controllers: [

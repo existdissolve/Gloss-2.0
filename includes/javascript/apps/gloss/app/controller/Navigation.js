@@ -21,9 +21,13 @@ Ext.define('Gloss.controller.Navigation', {
         { ref:'CenterRegion', selector:'[xtype=layout.center]' },
         { ref:'AdobeBugGrid', selector:'[xtype=grid.adobebug]' },
         { ref:'RailoBugGrid', selector:'[xtype=grid.railobug]' },
+        { ref:'AdobeTree', selector:'treepanel#Adobe'},
+        { ref:'RailoTree', selector:'treepanel#Railo'},
+        { ref:'CFLibTree', selector:'treepanel#CFLib'},
         { ref:'BugBorder', selector:'[xtype=bug]' },
         { ref:'BugDetail', selector:'[itemId=Details]'}        
     ],
+    promise: null,
     init: function() {
         this.listen({
             controller: {},
@@ -53,8 +57,44 @@ Ext.define('Gloss.controller.Navigation', {
                     change: this.onBugGridSearch
                 }
             },
-            global: {},
-            store: {}
+            global: {
+                dispatch: this.onDispatch
+            },
+            store: {
+                '#Adobe_Resources': {
+                    load: function( store, node, records, successful, eOpts ) {
+                        var me = this;
+                        if( !Ext.isEmpty( me.promise ) && me.promise.type=='adobe' ) {
+                            var record = me.findContent( node, me.promise.slug );
+                            if( !Ext.isEmpty( record ) ) {
+                                me.loadContent( record, me.promise.type );
+                            }
+                        }
+                    }
+                },
+                '#Railo_Resources': {
+                    load: function( store, node, records, successful, eOpts ) {
+                        var me = this;
+                        if( !Ext.isEmpty( me.promise ) && me.promise.type=='railo' ) {
+                            var record = me.findContent( node, me.promise.slug );
+                            if( !Ext.isEmpty( record ) ) {
+                                me.loadContent( record, me.promise.type );
+                            }
+                        }
+                    }
+                },
+                '#CFLib_Resources': {
+                    load: function( store, node, records, successful, eOpts ) {
+                        var me = this;
+                        if( !Ext.isEmpty( me.promise ) && me.promise.type=='cflib' ) {
+                            var record = me.findContent( node, me.promise.slug );
+                            if( !Ext.isEmpty( record ) ) {
+                                me.loadContent( record, me.promise.type );
+                            }
+                        }
+                    }
+                }
+            }
         });
         this.callParent();
     },
@@ -200,6 +240,43 @@ Ext.define('Gloss.controller.Navigation', {
             center = me.getCenterRegion();
         // return match
         return !Ext.isEmpty( center.down( '[itemId=' + itemId + ']' ) ) ? true : false;
+    },
+    /**
+     * Attempts to locate content within navigation stores
+     * @private
+     * @param {Ext.data.NodeInterface} node
+     * @param {String} slug
+     * return Ext.data.Model/null
+     */
+    findContent: function( node, slug ) {
+        var me = this;
+        var child = node.findChildBy( function( child ){
+            return child.get( 'href' ).toLowerCase()==slug;
+        }, node, true );
+        if( child ) {
+            me.expandParents( child );
+        }
+        return child;
+    },
+    expandParents: function( node ) {
+        var parent = node.parentNode;
+        parent.expand();
+    },
+    /**
+     * Handles incoming dispatch path
+     * @private
+     * @param {String} token
+     */
+    onDispatch: function( token ) {
+        var me = this,
+            tokenPaths = token.split( '/' ),
+            type = tokenPaths[ 0 ].toLowerCase(),
+            slug = tokenPaths[ 1 ].toLowerCase();
+        // set promise
+        me.promise = {
+            type: type,
+            slug: slug
+        };
     },
     /**
      * Handles click events on Bug menu items

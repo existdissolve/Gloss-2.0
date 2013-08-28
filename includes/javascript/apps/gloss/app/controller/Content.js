@@ -1,5 +1,5 @@
 /**
- * Primary controller for navigation actions with the Gloss application
+ * Primary controller for content management and interactions with the Gloss application
  */
 Ext.define('Gloss.controller.Content', {
     extend: 'Gloss.controller.Base',
