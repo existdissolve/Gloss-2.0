@@ -58,41 +58,18 @@ Ext.define('Gloss.controller.Navigation', {
                 }
             },
             global: {
-                dispatch: this.onDispatch
+                dispatch: this.onDispatch,
+                historyadd: this.afterDispatch
             },
             store: {
                 '#Adobe_Resources': {
-                    load: function( store, node, records, successful, eOpts ) {
-                        var me = this;
-                        if( !Ext.isEmpty( me.promise ) && me.promise.type=='adobe' ) {
-                            var record = me.findContent( node, me.promise.slug );
-                            if( !Ext.isEmpty( record ) ) {
-                                me.loadContent( record, me.promise.type );
-                            }
-                        }
-                    }
+                    load: this.afterDispatch
                 },
                 '#Railo_Resources': {
-                    load: function( store, node, records, successful, eOpts ) {
-                        var me = this;
-                        if( !Ext.isEmpty( me.promise ) && me.promise.type=='railo' ) {
-                            var record = me.findContent( node, me.promise.slug );
-                            if( !Ext.isEmpty( record ) ) {
-                                me.loadContent( record, me.promise.type );
-                            }
-                        }
-                    }
+                    load: this.afterDispatch
                 },
                 '#CFLib_Resources': {
-                    load: function( store, node, records, successful, eOpts ) {
-                        var me = this;
-                        if( !Ext.isEmpty( me.promise ) && me.promise.type=='cflib' ) {
-                            var record = me.findContent( node, me.promise.slug );
-                            if( !Ext.isEmpty( record ) ) {
-                                me.loadContent( record, me.promise.type );
-                            }
-                        }
-                    }
+                    load: this.afterDispatch
                 }
             }
         });
@@ -270,13 +247,37 @@ Ext.define('Gloss.controller.Navigation', {
     onDispatch: function( token ) {
         var me = this,
             tokenPaths = token.split( '/' ),
-            type = tokenPaths[ 0 ].toLowerCase(),
+            type,
+            slug;
+        if( tokenPaths.length==2 ) {
+            type = tokenPaths[ 0 ].toLowerCase();
             slug = tokenPaths[ 1 ].toLowerCase();
-        // set promise
-        me.promise = {
-            type: type,
-            slug: slug
-        };
+            // set promise
+            me.promise = {
+                type: type,
+                slug: slug
+            };    
+        }
+    },
+    /**
+     * Handles loading content based on promised slug/type
+     * @private
+     * @param {Ext.data.Store} store
+     * @param {Ext.data.NodeInterface} node
+     * @param {Ext.data.Model[]} records
+     * @param {Boolean} successful
+     * @param {Object} eOpts
+     */
+    afterDispatch: function( store, node, records, successful, eOpts ) {
+        var me = this,
+            record;
+        if( !Ext.isEmpty( me.promise ) ) {
+            record = me.findContent( node, me.promise.slug );
+            if( !Ext.isEmpty( record ) ) {
+                me.loadContent( record, me.promise.type );
+                me.promise = null;
+            }
+        }
     },
     /**
      * Handles click events on Bug menu items
@@ -295,7 +296,7 @@ Ext.define('Gloss.controller.Navigation', {
         e.stopEvent();
         
         // call load content
-        me.loadBugGrid( type );
+        //me.loadBugGrid( type );
     },
     /**
      * Handles click events on Adobe menu items
@@ -312,7 +313,7 @@ Ext.define('Gloss.controller.Navigation', {
         // stop the event
         e.stopEvent();
         // call load content
-        me.loadContent( record, 'Adobe' );
+        //me.loadContent( record, 'Adobe' );
     },
     /**
      * Handles click events on Railo menu items
@@ -329,7 +330,7 @@ Ext.define('Gloss.controller.Navigation', {
         // stop the event
         e.stopEvent();
         // call load content
-        me.loadContent( record, 'Railo' );
+        //me.loadContent( record, 'Railo' );
     },
     /**
      * Handles click events on CFLib menu items

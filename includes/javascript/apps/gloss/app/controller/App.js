@@ -80,9 +80,12 @@
     addHistory: function( treeview, record, item, e, eOpts ) {
         var me = this,
             token = record.get( 'href' ).toLowerCase(),
-            type = treeview.up( 'treepanel' ).itemId.toLowerCase();
+            type = treeview.up( 'treepanel' ).itemId.toLowerCase(),
+            newToken = type + '/' + token;
         if( !Ext.isEmpty( token ) ) {
-            Ext.util.History.add( type + '/' + token, true, true );
+            Ext.util.History.add( newToken, true, true );
+            Ext.globalEvents.fireEvent( 'dispatch', newToken );
+            Ext.globalEvents.fireEvent( 'historyadd', treeview.store, treeview.node, record, true, eOpts );
         }
     },
     /**
